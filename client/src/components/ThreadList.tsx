@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { summarizeNotes, type CollectCommentsResponse, type MergeRequestCommentsResponse, type MergeRequestSummary, type ReviewThread } from '@gitlab-tools/shared';
 import { exportCsv, exportJson } from '../lib/export';
+import { CommentListDialog } from './CommentListDialog';
 import {
   commentAuthors,
   commentFiles,
@@ -56,6 +58,8 @@ export function ThreadList({
   const error = mode === 'all' ? aggregateError : singleError;
   const hasSource = mode === 'all' ? aggregate !== null : single !== null;
   const stamp = new Date().toISOString().slice(0, 10);
+  const [listOpen, setListOpen] = useState(false);
+  const commentCount = notesIn(visible).length;
 
   return (
     <section className="comments" aria-label="Review comments">
@@ -80,13 +84,16 @@ export function ThreadList({
                 Open merge request
               </a>
             ) : null}
+            <button type="button" className="button" disabled={commentCount === 0} onClick={() => setListOpen(true)}>
+              View list
+            </button>
             <button type="button" className="button" disabled={visible.length === 0} onClick={() => exportJson(`review-comments-${projectKey}-${stamp}.json`, visible)}>
               JSON
             </button>
             <button
               type="button"
               className="button"
-              disabled={notesIn(visible).length === 0}
+              disabled={commentCount === 0}
               onClick={() => exportCsv(`review-comments-${projectKey}-${stamp}.csv`, visible, mergeRequests)}
             >
               CSV
@@ -216,6 +223,9 @@ export function ThreadList({
           />
         ) : null}
       </div>
+      {listOpen ? (
+        <CommentListDialog threads={visible} mergeRequests={mergeRequests} onClose={() => setListOpen(false)} />
+      ) : null}
     </section>
   );
 }
