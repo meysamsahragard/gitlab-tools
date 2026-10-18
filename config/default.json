@@ -1,0 +1,26 @@
+{
+  "server": {
+    "port": 3001,
+    "host": "127.0.0.1",
+    "clientOrigin": "http://localhost:5173"
+  },
+  "cache": {
+    "ttlSeconds": 60
+  },
+  "gitlab": {
+    "baseUrl": "http://gitlab.corp.mabnadp.com",
+    "perPage": 100,
+    "maxMergeRequests": 100,
+    "maxCollectIds": 100,
+    "maxDiscussionsPerMergeRequest": 2000,
+    "aggregateConcurrency": 4,
+    "projects": [
+      {
+        "id": "emax-web-v2",
+        "path": "mabna/emax-web-v2",
+        "url": "http://gitlab.corp.mabnadp.com/mabna/emax-web-v2",
+        "default": true
+      }
+    ]
+  }
+}
